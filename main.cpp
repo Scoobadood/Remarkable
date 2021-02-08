@@ -89,8 +89,8 @@ int authenticate_password(ssh_session session, const char *password) {
     return rc;
 }
 
-int connect(ssh_session session) {
-    ssh_options_set(session, SSH_OPTIONS_HOST, "192.168.0.8");
+int connect(ssh_session session, const char * host) {
+    ssh_options_set(session, SSH_OPTIONS_HOST, host);
     int verbosity = SSH_LOG_WARN;
     ssh_options_set(session, SSH_OPTIONS_LOG_VERBOSITY, &verbosity);
     const char *user = "root";
@@ -110,12 +110,13 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    if(connect(session) != SSH_OK) {
+    const char * host = argv[1];
+    if(connect(session, host) != SSH_OK) {
         exit(-1);
     }
 
     // Authenticate ourselves
-    const char *password = "wg8czspbIz";
+    const char *password = argv[2];
     authenticate_password(session, password);
 
     char * templatesData;
