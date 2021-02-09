@@ -6,6 +6,8 @@
 #define REMARKABLE_SCP_H
 
 
+#include <libssh/libssh.h>
+
 #include <json/json.h>
 
 Json::Value

@@ -1,10 +1,10 @@
 #define LIBSSH_STATIC 1
 
 #include <iostream>
-#include <strings.h>
 #include <libssh/libssh.h>
 #include "json/json.h"
 #include "scp.h"
+#include "page_template.h"
 
 int main(int argc, char *argv[]) {
     using namespace std;
@@ -21,9 +21,10 @@ int main(int argc, char *argv[]) {
 
     const auto templates = get_templates_json_from_device(session, host, user_id, password);
     for (const auto &t : templates) {
+        auto pt = page_template::from_json(t);
         auto name = t.get("name", Json::Value::null).asString();
-        std::cout << name << std::endl;
+        std::cout << pt.name << std::endl;
     }
-    
+
     ssh_free(session);
 }
