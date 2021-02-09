@@ -14,7 +14,7 @@ endif()
 
 #find_package(jsoncpp REQUIRED)
 
-add_executable(Remarkable main.cpp)
+add_executable(Remarkable main.cpp scp.cpp scp.h)
 
 find_library(shaz jsoncpp REQUIRED PATHS /usr/local/lib)
 
