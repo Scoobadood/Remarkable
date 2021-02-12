@@ -16,3 +16,32 @@ Next steps include:
 * Generating the SVG directly from the PNG
 * Ability to specify an icon file
 * Maybe some sort of UI?
+
+## Usage
+Create 1404x1720 PNG file of the template
+Then Convert to SVG, ensure that the files have the same name apart from the extension
+
+e.g. template.svg and template.png
+
+Run this app in the same directory as the images. You'll be presented with a menu like this:
+
+Templates
+---------
+1. Install a template
+2. Uninstall a template
+3. Make a new category
+X. exit
+   
+If (1) is selected
+1. Template1
+2. Template2
+3. Template3 [installed]
+
+Select (1)
+What category?
+1. Category 1
+2. Category 2
+3. Category 3
+X. Back
+
+
