@@ -13,7 +13,14 @@ page_template page_template::from_json(const Json::Value &value) {
     auto name = value["name"].asString();
     auto file_name = value["filename"].asString();
     auto icon_code = value["iconCode"].asString();
-    auto landscape = value["landscape"].asBool();
+    // Some built in templates have "true" . Grrr...
+    auto landscape_value = value["landscape"];
+    bool landscape = false;
+    if ( landscape_value.isBool() ) {
+        landscape = landscape_value.asBool();
+    } else if ( landscape_value.isString()) {
+        landscape = (landscape_value.asString() == "true");
+    }
     auto categories_json = value["categories"];
     vector<string> categories{};
     for( const auto& cat : categories_json) {
