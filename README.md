@@ -7,7 +7,7 @@ Right now it will only establish a connection to a device and recover the templa
 Next steps include:
 * Adding the ability to push a PNG/SVG pair with a new template description
   * ~~Read files in a directory and get those with SVG and PNG extensions~~
-  * Check those against the template file to see if they are already installed
+  * ~~Check those against the template file to see if they are already installed~~
   * SCP both files to the device
   * Prompt for a template name
   * Is it landscape?  
@@ -23,25 +23,13 @@ Then Convert to SVG, ensure that the files have the same name apart from the ext
 
 e.g. template.svg and template.png
 
-Run this app in the same directory as the images. You'll be presented with a menu like this:
+Run this app in the same directory as the images. You'll be presented with a menu.
 
-Templates
----------
-1. Install a template
-2. Uninstall a template
-3. Make a new category
-X. exit
-   
-If (1) is selected
-1. Template1
-2. Template2
-3. Template3 [installed]
+Install templates lets you copy templates to the device. Chosing to install a template that's already installed will overwrite the current version.
+You will be warned if your template clashes with a template on the device.
+You will be prompted for an icon, category and whether this is a landscape template or not.
 
-Select (1)
-What category?
-1. Category 1
-2. Category 2
-3. Category 3
-X. Back
+Delete template lets you remove a template *that you installed* to the device. You can't delete preinstalled templates
 
+Change template lets you toggle whether a template is landscape or not and to edit the categories it belongs to.
 
