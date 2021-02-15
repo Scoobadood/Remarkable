@@ -1,25 +1,57 @@
 cmake_minimum_required(VERSION 3.18)
-project(Remarkable)
+
+project(remarkable
+		VERSION 0.1
+		LANGUAGES CXX )
+
+set(PROJECT_VERSION 0.2)
+
+set(GIT_VERSION_STRING "git version 2.20.1 (Apple Git-117)")
+
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2 -Wall")
+set(CMAKE_CXX_FLAGS "")
+
+# Write targets to bin directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../lib)
 
 set(CMAKE_CXX_STANDARD 14)
 
-find_package(libssh REQUIRED)
-if (NOT TARGET ssh)
-	add_library(ssh SHARED IMPORTED)
-	set_target_properties(ssh
-			PROPERTIES
-			​          IMPORTED_LOCATION "${LIBSSH_LIBRARIES}"
-			INTERFACE_INCLUDE_DIRECTORIES "${LIBSSH_INCLUDE_DIR}")
-endif()
+# Need spdlog
+find_package(spdlog REQUIRED)
+find_package(fmt REQUIRED)
 
-#find_package(jsoncpp REQUIRED)
+# Download and unpack googletest at configure time
+configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
+execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
+execute_process(COMMAND "${CMAKE_COMMAND}" --build .
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
 
-add_executable(Remarkable main.cpp rm_template.cpp rm_template.h file_utilities.cpp file_utilities.h remarkable.cpp remarkable.h menu.cpp menu.h)
+# Prevent GoogleTest from overriding our compiler/linker options
+# when building with Visual Studio
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-find_library(shaz jsoncpp REQUIRED PATHS /usr/local/lib)
+# Add googletest directly to our build. This adds
+# the following targets: gtest, gtest_main, gmock
+# and gmock_main
+add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
+		"${CMAKE_BINARY_DIR}/googletest-build")
 
-message(STATUS ${shaz})
-target_link_libraries(Remarkable
-		ssh
-		${shaz})
+# Enable Test
+enable_testing( )
 
+add_executable(reLoader
+		main.cpp
+)
+
+
+target_link_libraries(reLoader
+		menu
+		remarkable
+)
+
+add_subdirectory( libmenu )
+add_subdirectory( libremarkable )

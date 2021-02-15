@@ -47,7 +47,7 @@ find_eligible_templates_in_directory(const std::string &directory) {
     vector<string> intersection;
     sort(png_files.begin(), png_files.end());
     sort(svg_files.begin(), svg_files.end());
-    auto it = set_intersection(begin(png_files), end(png_files),
+    set_intersection(begin(png_files), end(png_files),
                                begin(svg_files), end(svg_files),
                                back_inserter(intersection));
     candidates.reserve(intersection.size());

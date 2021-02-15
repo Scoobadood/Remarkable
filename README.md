@@ -23,7 +23,7 @@ Then Convert to SVG, ensure that the files have the same name apart from the ext
 
 e.g. template.svg and template.png
 
-Run this app in the same directory as the images. You'll be presented with a menu.
+Run this app in the same directory as the images. You'll be presented with a cli_menu.
 
 Install templates lets you copy templates to the device. Chosing to install a template that's already installed will overwrite the current version.
 You will be warned if your template clashes with a template on the device.
