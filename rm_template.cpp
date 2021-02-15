@@ -132,6 +132,23 @@ rm_template::rm_template(std::string name,
         categories{std::move(categories)},
         landscape{landscape} {}
 
+Json::Value
+rm_template::to_json() const {
+    Json::Value json;
+    json["name"] = name;
+    json["file_name"] = file_name;
+    json["icon_code"] = icon_code;
+    if( landscape) {
+        json["landscape"] = true;
+    }
+    for( const auto& category : categories) {
+        json["categories"].append(category);
+    }
+    return json;
+}
+
+
+
 const std::string &rm_template::get_name() const {
     return name;
 }
