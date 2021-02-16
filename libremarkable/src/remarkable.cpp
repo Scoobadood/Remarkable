@@ -11,8 +11,7 @@
  * Create an instance of the remarkable device with the gven host addess and password.
  */
 remarkable::remarkable(const std::string &host, const std::string &password)
-: host{host}, password{password}
-{
+        : host{host}, password{password} {
     using namespace std;
 
     session = ssh_new();
@@ -43,7 +42,7 @@ remarkable::remarkable(const std::string &host, const std::string &password)
 }
 
 ssh_scp
-remarkable::create_scp_session(const std::string & file_name) {
+remarkable::create_scp_session(const std::string &file_name) {
     using namespace std;
 
     ssh_scp scp_session_ptr = ssh_scp_new(session, SSH_SCP_READ, file_name.c_str());
@@ -65,16 +64,16 @@ remarkable::create_scp_session(const std::string & file_name) {
  * Copy a template to the device by copying the SVG and PNG files and updating the
  * templates.json file.
  */
-void push_template_to_device(const rm_template &tplate){}
+void push_template_to_device(const rm_template &tplate) {}
 
 /**
  * Delete a template from the device by deleting the files and
  * removing it from templates.json file.
  */
-void remove_template_from_device(const rm_template &tplate){}
+void remove_template_from_device(const rm_template &tplate) {}
 
 std::string
-static get_template_file_name( ) {
+static get_template_file_name() {
     static std::string TEMPLATE_FILE_NAME = "/usr/share/remarkable/templates/templates.json";
     return TEMPLATE_FILE_NAME;
 }
@@ -83,7 +82,7 @@ static get_template_file_name( ) {
  *
  */
 char *
-remarkable::read_templates_json(ssh_scp scp){
+remarkable::read_templates_json(ssh_scp scp) {
     using namespace std;
 
     int rc = ssh_scp_pull_request(scp);
@@ -93,7 +92,7 @@ remarkable::read_templates_json(ssh_scp scp){
     }
 
     int size = ssh_scp_request_get_size(scp);
-    char * buffer = (char *) malloc(size);
+    char *buffer = (char *) malloc(size);
     if (buffer == nullptr) {
         cerr << "Memory allocation error" << endl;
         return nullptr;
@@ -129,13 +128,13 @@ remarkable::get_installed_temnplates() {
     using namespace std;
 
     ssh_scp scp;
-    if( ( scp = create_scp_session(get_template_file_name()) ) == nullptr) {
+    if ((scp = create_scp_session(get_template_file_name())) == nullptr) {
         cerr << "SCP Session failed" << endl;
         return vector<rm_template>{};
     }
 
     char *templatesData = read_templates_json(scp);
-    if(templatesData == nullptr) {
+    if (templatesData == nullptr) {
         cerr << "Failed to get templates file from device." << endl;
         return vector<rm_template>{};
     }
@@ -163,8 +162,23 @@ remarkable::get_installed_temnplates() {
 void remarkable::push_template_to_device(const rm_template &tplate) {}
 
 bool
-remarkable::remove_template_from_device(const rm_template &tplate) {
+remarkable::remove_template_from_installed_list(const rm_template &tplate) {
     using namespace std;
+
+    // Check that it's actually there.
+    const auto & found = find(begin(installed_templates), end(installed_templates), tplate.get_name());
+    if( found == end(installed_templates)) {
+        cerr << "Template " << tplate.get_name() << " is not installed." << endl;
+        return false;
+    }
+    installed_templates.erase(found);
+    return true;
+}
+
+bool
+remarkable::execute_command_on_device_silently(const std::string & cmd) {
+    using namespace std;
+
     ssh_channel channel = ssh_channel_new(session);
     if (channel == nullptr) {
         cerr << "Couldn't create channel to device" << endl;
@@ -178,13 +192,6 @@ remarkable::remove_template_from_device(const rm_template &tplate) {
         return false;
     }
 
-    std::ostringstream stringStream;
-    stringStream << "rm ";
-    stringStream << tplate.get_name();
-    stringStream << ".*";
-    stringStream << " > /dev/null 2>&1";
-    auto cmd = stringStream.str();
-
     rc = ssh_channel_request_exec(channel, cmd.c_str());
     if (rc != SSH_OK) {
         ssh_channel_close(channel);
@@ -195,6 +202,30 @@ remarkable::remove_template_from_device(const rm_template &tplate) {
     ssh_channel_send_eof(channel);
     ssh_channel_close(channel);
     ssh_channel_free(channel);
-
     return true;
+}
+
+
+bool
+remarkable::remove_template_from_device(const rm_template &tplate) {
+    using namespace std;
+
+    if( rm_template::is_built_in(tplate.get_name())) {
+        cerr << "Can't delete built-in template " << tplate.get_name() << endl;
+        return false;
+    }
+
+    if( !remove_template_from_installed_list(tplate)) {
+        return false;
+    }
+
+    // Now delete files from the devices
+    std::ostringstream stringStream;
+    stringStream << "rm ";
+    stringStream << tplate.get_name();
+    stringStream << ".*";
+    stringStream << " > /dev/null 2>&1";
+    auto cmd = stringStream.str();
+
+    return (execute_command_on_device_silently(cmd));
 }

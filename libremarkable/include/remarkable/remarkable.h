@@ -6,6 +6,7 @@
 #define REMARKABLE_REMARKABLE_H
 
 #include <vector>
+#include <list>
 #include <libssh/libssh.h>
 
 #include "rm_template.h"
@@ -13,10 +14,14 @@
 class remarkable {
     const std::string host;
     const std::string password;
+    std::list<rm_template> installed_templates;
     ssh_session session;
 
     ssh_scp create_scp_session(const std::string & file_name);
     char * read_templates_json(ssh_scp scp);
+    bool remove_template_from_installed_list(const rm_template &tplate);
+    bool execute_command_on_device_silently(const std::string & cmd);
+
 public:
     /**
      * Create an instance of the remarkable device with the gven host addess and password.
