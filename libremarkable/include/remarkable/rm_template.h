@@ -26,11 +26,15 @@ public:
             bool landscape
     );
 
+    bool operator==(const std::string & other) {
+        return name == other;
+    }
+
     static rm_template from_json(const Json::Value &value);
 
     Json::Value to_json() const;
 
-    static bool is_built_in(std::string & template_name);
+    static bool is_built_in(const std::string &template_name);
 
     const std::string &get_name() const;
 
@@ -40,7 +44,7 @@ public:
 
     const std::vector<std::string> &get_categories() const;
 
-    const bool is_landscape() const;
+    bool is_landscape() const;
 };
 
 #endif //REMARKABLE_RM_TEMPLATE_H
