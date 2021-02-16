@@ -91,7 +91,7 @@ static std::set<std::string> get_builtin_names() {
 }
 
 bool
-rm_template::is_built_in(std::string &template_name) {
+rm_template::is_built_in(const std::string &template_name){
     return (get_builtin_names().count(template_name) > 0);
 }
 
@@ -165,6 +165,6 @@ const std::vector<std::string> &rm_template::get_categories() const {
     return categories;
 }
 
-const bool rm_template::is_landscape() const {
+bool rm_template::is_landscape() const {
     return landscape;
 }
