@@ -23,7 +23,7 @@ void edit_menu(void *adp) {
     auto installed_templates = ad->device.get_installed_templates();
 
     vector<cli_menu_option> options;
-    char c = 0;
+    char c = 'a';
     for (auto &templ : installed_templates) {
         if( !templ.is_built_in()) {
             options.emplace_back(c++, templ.get_name(), do_edit_template, &templ);
