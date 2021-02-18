@@ -11,30 +11,50 @@
 #include <json/json.h>
 
 class rm_template {
-    const std::string name;
-    const std::string file_name;
-    const std::string icon_code;
-    const std::vector<std::string> categories;
-    const bool landscape;
+    // Template name
+    std::string name;
+
+    // File name stem for PNG and SVG files
+    std::string file_name;
+
+    // Icon code; new templates default to blank
+    std::string icon_code;
+
+    // The set of categories to which this template belongs
+    std::set<std::string> categories;
+
+    // True if this is a landscape template
+    bool landscape;
+
+    // True iff this is a built in template, otherwise false.
+    bool built_in;
+
+    static bool is_built_in_template_name(const std::string &template_name);
 
 public:
     rm_template(
             std::string name,
             std::string file_name,
             std::string icon_code,
-            std::vector<std::string> categories,
+            std::set<std::string> categories,
             bool landscape
     );
 
+    explicit rm_template(const Json::Value &value);
+
+    /**
+     * A template is 'equal' to a string if the template name matches the string.
+     */
     bool operator==(const std::string & other) {
         return name == other;
     }
 
-    static rm_template from_json(const Json::Value &value);
-
+    /**
+     * Convert to JSON.
+     */
     Json::Value to_json() const;
 
-    static bool is_built_in(const std::string &template_name);
+    bool is_built_in() const;
 
     const std::string &get_name() const;
 
@@ -42,7 +62,7 @@ public:
 
     const std::string &get_icon_code() const;
 
-    const std::vector<std::string> &get_categories() const;
+    const std::set<std::string> & get_categories() const;
 
     bool is_landscape() const;
 };

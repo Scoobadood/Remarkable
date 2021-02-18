@@ -40,7 +40,7 @@ doDeleteMenu(void *adp) {
     using namespace std;
 
     auto ad = (app_data *) adp;
-    auto installed_templates = ad->device.get_installed_temnplates();
+    auto installed_templates = ad->device.get_installed_templates();
 
     vector<cli_menu_option> options;
     int i = 0;
@@ -57,7 +57,7 @@ void doChangeMenu(void *adp) {
     using namespace std;
 
     auto ad = (app_data *) adp;
-    auto installed_templates = ad->device.get_installed_temnplates();
+    auto installed_templates = ad->device.get_installed_templates();
 
     vector<cli_menu_option> options;
     int i = 0;

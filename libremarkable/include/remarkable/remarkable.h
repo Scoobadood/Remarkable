@@ -17,10 +17,10 @@ class remarkable {
     std::list<rm_template> installed_templates;
     ssh_session session;
 
-    ssh_scp create_scp_session(const std::string & file_name);
-    char * read_templates_json(ssh_scp scp);
+    ssh_scp create_scp_session(const std::string &directory, int mode);
     bool remove_template_from_installed_list(const rm_template &tplate);
-    bool execute_command_on_device_silently(const std::string & cmd);
+    bool add_template_to_installed_list(const rm_template & tplate);
+    const char * serialise_templates_to_char_buffer( );
 
 public:
     /**
@@ -31,19 +31,19 @@ public:
     /**
      * @return A vector of templates.
      */
-    std::vector<rm_template> get_installed_temnplates();
+    std::vector<rm_template> get_installed_templates();
 
     /**
      * Copy a template to the device by copying the SVG and PNG files and updating the
      * templates.json file.
      */
-    void push_template_to_device(const rm_template &tplate);
+    bool install_template(const rm_template &tplate);
 
     /**
      * Delete a template from the device by deleting the files and
      * removing it from templates.json file.
      */
-    bool remove_template_from_device(const rm_template &tplate);
+    bool uninstall_template(const rm_template &tplate);
 };
 
 #endif //REMARKABLE_REMARKABLE_H

@@ -91,46 +91,44 @@ static std::set<std::string> get_builtin_names() {
 }
 
 bool
-rm_template::is_built_in(const std::string &template_name){
+rm_template::is_built_in_template_name(const std::string &template_name){
     return (get_builtin_names().count(template_name) > 0);
 }
 
-rm_template
-rm_template::from_json(const Json::Value &value) {
+rm_template::rm_template(const Json::Value &value) {
     using namespace std;
 
-    auto name = value["name"].asString();
-    auto file_name = value["filename"].asString();
-    auto icon_code = value["iconCode"].asString();
+    name = value["name"].asString();
+    file_name = value["filename"].asString();
+    icon_code = value["iconCode"].asString();
+
     // Some built in templates have "true" . Grrr...
     auto landscape_value = value["landscape"];
-    bool landscape = false;
+    landscape = false;
     if (landscape_value.isBool()) {
         landscape = landscape_value.asBool();
     } else if (landscape_value.isString()) {
         landscape = (landscape_value.asString() == "true");
     }
     auto categories_json = value["categories"];
-    vector<string> categories{};
     for (const auto &cat : categories_json) {
-        categories.push_back(cat.asString());
+        categories.emplace(cat.asString());
     }
-    rm_template pt{
-            name, file_name, icon_code, categories, landscape
-    };
-    return pt;
+    built_in = is_built_in_template_name(name);
 }
 
 rm_template::rm_template(std::string name,
                          std::string file_name,
                          std::string icon_code,
-                         std::vector<std::string> categories,
+                         std::set<std::string> categories,
                          const bool landscape) :
         name{std::move(name)},
         file_name{std::move(file_name)},
         icon_code{std::move(icon_code)},
         categories{std::move(categories)},
-        landscape{landscape} {}
+        landscape{landscape} {
+    built_in = is_built_in_template_name(name);
+}
 
 Json::Value
 rm_template::to_json() const {
@@ -147,7 +145,9 @@ rm_template::to_json() const {
     return json;
 }
 
-
+bool rm_template::is_built_in() const {
+    return built_in;
+}
 
 const std::string &rm_template::get_name() const {
     return name;
@@ -161,7 +161,7 @@ const std::string &rm_template::get_icon_code() const {
     return icon_code;
 }
 
-const std::vector<std::string> &rm_template::get_categories() const {
+const std::set<std::string> &rm_template::get_categories() const {
     return categories;
 }
 
