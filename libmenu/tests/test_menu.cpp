@@ -12,7 +12,7 @@ void test_menu::tear_down() {}
 TEST(test_menu, constructor_throws_with_null_function_ptr) {
 
 EXPECT_DEATH(
-        cli_menu_option('c', "Close", nullptr),
+        cli_menu_option('c', "Close", nullptr, nullptr),
         "PARSE ERROR: Argument: -x*");
 }
 

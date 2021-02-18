@@ -15,7 +15,7 @@ class cli_menu {
     const std::vector<cli_menu_option> options;
 
 public:
-    cli_menu(const std::string & name, const std::vector<cli_menu_option> & options);
+    cli_menu(std::string  name, std::vector<cli_menu_option>  options);
 
     void execute(std::ostream & output, std::istream & input, void *data) const;
 

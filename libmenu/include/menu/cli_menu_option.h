@@ -12,14 +12,19 @@ class cli_menu_option {
     const char option_letter;
     const std::string option_text;
     const menu_processing_function_ptr ptr;
+    void * option_data;
 
 public:
     cli_menu_option(
             char optionLetter,
-            const std::string &optionText,
-            const menu_processing_function_ptr ptr);
+            std::string optionText,
+            menu_processing_function_ptr ptr,
+            void * option_data);
 
     char get_option_letter() const { return option_letter;}
     const std::string & get_option_text() const { return option_text;}
-    const menu_processing_function_ptr get_menu_function() const { return ptr;}
+    /**
+     * @return True if this option should quit the menu.
+     */
+    bool execute() const;
 };

@@ -46,7 +46,7 @@ enable_testing( )
 add_executable(reLoader
 		main.h main.cpp
 		main_menu.h main_menu.cpp
-		uninstall_menu.h unnstall_menu.cpp
+		uninstall_menu.h uninstall_menu.cpp
 		install_menu.h install_menu.cpp
 		edit_menu.h edit_menu.cpp
 )
