@@ -25,7 +25,9 @@ uninstall_menu(void *adp) {
     vector<cli_menu_option> options;
     char c = 'a';
     for (auto &templ : installed_templates) {
-        options.emplace_back(c++, templ.get_name(), do_uninstall_template, &templ);
+        if( !templ.is_built_in()) {
+            options.emplace_back(c++, templ.get_name(), do_uninstall_template, &templ);
+        }
     }
     options.emplace_back(c, "Exit to main cli_menu", nullptr,nullptr);
     cli_menu menu{"Uninstall Templates", options};
