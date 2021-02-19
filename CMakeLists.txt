@@ -44,18 +44,27 @@ add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
 enable_testing( )
 
 add_executable(reLoader
-		main.h main.cpp
-		main_menu.h main_menu.cpp
-		uninstall_menu.h uninstall_menu.cpp
-		install_menu.h install_menu.cpp
-		edit_menu.h edit_menu.cpp
+		reLoader/main.h reLoader/main.cpp
+		reLoader/main_menu.h reLoader/main_menu.cpp
+		reLoader/uninstall_menu.h reLoader/uninstall_menu.cpp
+		reLoader/install_menu.h reLoader/install_menu.cpp
+		reLoader/edit_menu.h reLoader/edit_menu.cpp
 )
-
 
 target_link_libraries(reLoader
 		menu
 		remarkable
 )
 
+add_executable(reLoaderUi
+		reLoaderUi/reloader_app.cpp reLoaderUi/reloader_app.h
+		reLoaderUi/reloader_frame.cpp reLoaderUi/reloader_frame.h
+		)
+
+target_link_libraries(reLoaderUi
+		wx::net wx::core wx::base
+		remarkable)
+
 add_subdirectory( libmenu )
 add_subdirectory( libremarkable )
+add_subdirectory( reLoaderUi )

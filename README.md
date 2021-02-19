@@ -1,6 +1,7 @@
 # Project to allow easy installation of new templates onto reMarkable 2 devices.
 
-Currently this is a WiP and does nothing prticularly useful. Future commits will make this more usable.
+## History
+Currently this is a WiP and does nothing particularly useful. Future commits will make this more usable.
 
 Right now it will only establish a connection to a device and recover the templates.json file, parse it and list the templates which are installed.
 
@@ -9,7 +10,7 @@ Next steps include:
   * ~~Read files in a directory and get those with SVG and PNG extensions~~
   * ~~Check those against the template file to see if they are already installed~~
   * ~~SCP both files to the device~~
-  * Prompt for a template name
+  * ~~Prompt for a template name~~
   * Is it landscape?  
   * ~~Update the templates.json file~~
   * ~~push it back to the device with blank icon.~~  
@@ -18,18 +19,37 @@ Next steps include:
 * Maybe some sort of UI?
 
 ## Usage
+### Create template
 Create 1404x1720 PNG file of the template
 Then Convert to SVG, ensure that the files have the same name apart from the extension
 
 e.g. template.svg and template.png
 
-Run this app in the same directory as the images. You'll be presented with a cli_menu.
 
-Install templates lets you copy templates to the device. Chosing to install a template that's already installed will overwrite the current version.
-You will be warned if your template clashes with a template on the device.
-You will be prompted for an icon, category and whether this is a landscape template or not.
+### Launch app
+Menu Options:
 
-Delete template lets you remove a template *that you installed* to the device. You can't delete preinstalled templates
+Connect > 
+  Connect to the device. You will be prompted for an IP address and a Password.
+These will be saved for use the next time. After connection you will see a split pane with
+LHS The templates which are installed on the device
+Black = Built in templates, can't be changed
+Blue  = User installed templates, can be edited or removed.
 
-Change template lets you toggle whether a template is landscape or not and to edit the categories it belongs to.
+icons indicting whether they are landscape or portrait and
+(for blue) an edit icon and a delete icon
+
+RHS:
+A list of files 
+Non template files are grey
+Singular template files are red (ie svg withou png) 
+Template files are clustered and blue with an install icon
+
+
+You can:
+Click an edit icon and a popup will appear allowing you to toggle landscape mode or rename a template.
+Click on a delete icon and you will be prompted whether or not to delete the template
+
+Click on an install icon and you will be prompted for a name and landscapiness
+
 
