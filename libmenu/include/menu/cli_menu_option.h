@@ -20,8 +20,8 @@ public:
             std::string optionText,
             menu_processing_function_ptr ptr,
             void * option_data);
-
     char get_option_letter() const { return option_letter;}
+    void * get_option_data() const { return option_data;}
     const std::string & get_option_text() const { return option_text;}
     /**
      * @return True if this option should quit the menu.

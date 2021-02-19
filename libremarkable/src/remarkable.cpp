@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <set>
 #include <libssh/libssh.h>
 
 /**
@@ -177,7 +178,7 @@ write_file_to_device(ssh_scp scp, const std::string &file_name, const char *data
 }
 
 bool
-copy_file_to_device(ssh_scp scp, const std::string & file_name) {
+copy_file_to_device(ssh_scp scp, const std::string &file_name) {
     using namespace std;
     char *file_data = nullptr;
     size_t file_length = 0;
@@ -210,7 +211,7 @@ remarkable::remove_template_from_installed_list(const rm_template &tplate) {
 }
 
 bool
-remarkable::add_template_to_installed_list(const rm_template & tplate){
+remarkable::add_template_to_installed_list(const rm_template &tplate) {
     using namespace std;
 
     // Check that it's not there already
@@ -373,7 +374,7 @@ remarkable::install_template(const rm_template &tplate) {
 
     // Copy SVG and PNG files
     const auto svg_file_name = tplate.get_name() + ".svg";
-    if( !copy_file_to_device(scp, svg_file_name)) {
+    if (!copy_file_to_device(scp, svg_file_name)) {
         cerr << "Failed to install SVG file" << endl;
         ssh_scp_close(scp);
         ssh_scp_free(scp);
@@ -381,7 +382,7 @@ remarkable::install_template(const rm_template &tplate) {
     }
 
     const auto png_file_name = tplate.get_name() + ".png";
-    if( !copy_file_to_device(scp, png_file_name)) {
+    if (!copy_file_to_device(scp, png_file_name)) {
         cerr << "Failed to install PNG file" << endl;
         ssh_scp_close(scp);
         ssh_scp_free(scp);
@@ -398,4 +399,18 @@ remarkable::install_template(const rm_template &tplate) {
 
     // Now copy template files to the device
     return wrote_ok;
+}
+
+/**
+ * Delete a template from the device by deleting the files and
+ * removing it from templates.json file.
+ */
+std::set<std::string> remarkable::get_known_categories() {
+    using namespace std;
+
+    known_categories.clear();
+    for (const auto &tpl : installed_templates) {
+        known_categories.emplace(tpl.get_name());
+    }
+    return known_categories;
 }
