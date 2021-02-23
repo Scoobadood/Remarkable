@@ -9,10 +9,15 @@
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
 #endif
+#include <remarkable/remarkable.h>
 
 class reloader_app : public wxApp {
+    std::string host;
+    std::string password;
+
+    remarkable * device;
 public:
-    virtual bool OnInit();
+    bool OnInit() override;
 };
 
 #endif //REMARKABLE_RELOADER_APP_H
