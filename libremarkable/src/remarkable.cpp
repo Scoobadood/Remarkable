@@ -44,7 +44,7 @@ remarkable::remarkable(const std::string &host, const std::string &password)
 }
 
 ssh_scp
-remarkable::create_scp_session(const std::string &directory, int mode) {
+remarkable::create_scp_session(const std::string &directory, int mode) const {
     using namespace std;
 
     ssh_scp scp_session_ptr = ssh_scp_new(session, mode, directory.c_str());
@@ -263,7 +263,7 @@ execute_command_on_device_silently(ssh_session session, const std::string &cmd) 
  * @return A vector of templates.
  */
 std::vector<rm_template>
-remarkable::get_installed_templates() {
+remarkable::get_installed_templates() const {
     using namespace std;
 
     // Establish SCP connection for read

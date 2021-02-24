@@ -18,7 +18,7 @@ class remarkable {
     std::set<std::string> known_categories;
     ssh_session session;
 
-    ssh_scp create_scp_session(const std::string &directory, int mode);
+    ssh_scp create_scp_session(const std::string &directory, int mode) const;
 
     bool remove_template_from_installed_list(const rm_template &tplate);
 
@@ -35,7 +35,7 @@ public:
     /**
      * @return A vector of templates.
      */
-    std::vector<rm_template> get_installed_templates();
+    std::vector<rm_template> get_installed_templates() const;
 
     /**
      * Copy a template to the device by copying the SVG and PNG files and updating the
