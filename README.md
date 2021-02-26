@@ -32,14 +32,15 @@ Menu Options:
 Connect > 
   Connect to the device. You will be prompted for an IP address and a Password.
 These will be saved for use the next time. After connection you will see a split pane with
-LHS The templates which are installed on the device
+
+RHS The templates which are installed on the device
 Black = Built in templates, can't be changed
 Blue  = User installed templates, can be edited or removed.
 
 icons indicting whether they are landscape or portrait and
 (for blue) an edit icon and a delete icon
 
-RHS:
+LHS:
 A list of files 
 Non template files are grey
 Singular template files are red (ie svg withou png) 

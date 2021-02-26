@@ -59,6 +59,7 @@ target_link_libraries(reLoader
 add_executable(reLoaderUi
 		reLoaderUi/reloader_app.cpp reLoaderUi/reloader_app.h
 		reLoaderUi/reloader_conect_dlg.cpp reLoaderUi/reloader_connect_dlg.h
+		reLoaderUi/template_list_ctrl.cpp reLoaderUi/template_list_ctrl.h
 		)
 
 target_link_libraries(reLoaderUi

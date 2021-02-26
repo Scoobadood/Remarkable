@@ -6,6 +6,7 @@
 #include <wx/listctrl.h>
 #include "reloader_app.h"
 #include "reloader_connect_dlg.h"
+#include "template_list_ctrl.h"
 
 template<typename ... Args>
 std::string string_format(const std::string &format, Args ... args) {
@@ -16,45 +17,10 @@ std::string string_format(const std::string &format, Args ... args) {
     return std::string(buf.get(), buf.get() + size - 1); // We don't want the '\0' inside
 }
 
-int wxCALLBACK sort_template_list(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortData)  {
-    // Sort installed templates to the front
-    auto * tp1 = (rm_template *) item1;
-    auto * tp2 = (rm_template *) item2;
-    if(tp1->is_built_in() && !tp2->is_built_in()) {
-        return 1;
-    }
-    if(!tp1->is_built_in() && tp2->is_built_in()) {
-        return -1;
-    }
-    return tp1->get_name().compare(tp2->get_name());
-}
-
-
 wxListView * make_template_list(wxWindow *parent, remarkable * const device) {
-    auto list = new wxListView(parent, 401);
-    list->AppendColumn("Templates");
-    auto item_index = 0;
-    auto installed_templates = device->get_installed_templates();
-    for (const auto &tplate : installed_templates) {
-        list->InsertItem(item_index, tplate.get_name());
-        list->SetItemPtrData(item_index, (wxUIntPtr) &installed_templates.at(item_index));
-        list->SetItemTextColour(item_index,
-                                tplate.is_built_in()
-                                ? *wxLIGHT_GREY
-                                : *wxBLACK
-        );
-        if (tplate.is_built_in()) {
-            list->SetItemFont(item_index, *wxITALIC_FONT);
-        }
-        item_index++;
-    }
-    list->SortItems(sort_template_list, 0);
-    list->SetColumnWidth(0, wxLIST_AUTOSIZE);
-    // Remove client data because the vectors going out of scope.
-    for( int i=0; i<list->GetItemCount(); ++i ) {
-        list->SetItemPtrData(i, 0);
-    }
 
+    auto list = new template_list_ctrl(parent);
+    list->set_templates(device->get_installed_templates());
     return list;
 }
 
