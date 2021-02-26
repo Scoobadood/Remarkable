@@ -5,11 +5,16 @@
 #ifndef REMARKABLE_TEMPLATE_LIST_CTRL_H
 #define REMARKABLE_TEMPLATE_LIST_CTRL_H
 
-#include <wx/listctrl.h>
+#include <wx/wxprec.h>
+#ifndef WX_PRECOMP
+#include <wx/wx.h>
+#endif
+
 #include <vector>
+
 #include <remarkable/rm_template.h>
 
-class template_list_ctrl : public wxListView {
+class template_list_ctrl : public wxScrolledWindow {
 public:
     explicit template_list_ctrl(wxWindow *parent);
 

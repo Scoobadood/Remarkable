@@ -2,7 +2,6 @@
 // Created by Dave Durbin (Old) on 27/2/21.
 //
 
-#include <wx/imaglist.h>
 #include "template_list_ctrl.h"
 
 int wxCALLBACK sort_template_list(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortData) {
@@ -18,31 +17,28 @@ int wxCALLBACK sort_template_list(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortD
     return tp1->get_name().compare(tp2->get_name());
 }
 
-template_list_ctrl::template_list_ctrl(wxWindow *parent) : wxListView(parent) {
-    AppendColumn("Templates");
+template_list_ctrl::template_list_ctrl(wxWindow *parent) : wxScrolledWindow(parent,wxID_ANY,wxDefaultPosition,wxDefaultSize,wxVSCROLL) {
+    SetScrollRate(0,1);
 }
 
 void template_list_ctrl::set_templates(const std::vector<rm_template> &templates) {
-    DeleteAllItems();
-    auto item_index = 0;
+    DestroyChildren();
+    auto sizer = new wxBoxSizer(wxVERTICAL);
     for (const auto &tplate : templates) {
-        InsertItem(item_index, tplate.get_name());
-        SetItemPtrData(item_index, (wxUIntPtr) &templates.at(item_index));
-        SetItemTextColour(item_index,
-                          tplate.is_built_in()
-                          ? *wxLIGHT_GREY
-                          : *wxBLACK
-        );
+        // Make a Panel
+        auto panel = new wxPanel(this);
+        panel->SetBackgroundColour(*wxWHITE);
 
-        if (tplate.is_built_in()) {
-            SetItemFont(item_index, *wxITALIC_FONT);
+        
+
+        // Add text to it
+        auto text = new wxStaticText(panel, wxID_ANY,tplate.get_name());
+        if( tplate.is_built_in()) {
+            text->SetForegroundColour(*wxLIGHT_GREY);
+            text->SetFont(*wxITALIC_FONT);
         }
-        item_index++;
+        // Add it to the box sizer
+        sizer->Add(panel,wxSizerFlags(1).Align(wxALIGN_LEFT).Expand());
     }
-    SortItems(sort_template_list, 0);
-    SetColumnWidth(0, wxLIST_AUTOSIZE);
-    // Remove client data because the vectors going out of scope.
-    for (int i = 0; i < GetItemCount(); ++i) {
-        SetItemPtrData(i, 0);
-    }
+    SetSizerAndFit(sizer);
 }
