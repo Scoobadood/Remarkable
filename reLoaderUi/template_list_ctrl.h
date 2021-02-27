@@ -6,8 +6,11 @@
 #define REMARKABLE_TEMPLATE_LIST_CTRL_H
 
 #include <wx/wxprec.h>
+
 #ifndef WX_PRECOMP
+
 #include <wx/wx.h>
+
 #endif
 
 #include <vector>
@@ -19,6 +22,10 @@ public:
     explicit template_list_ctrl(wxWindow *parent);
 
     void set_templates(const std::vector<rm_template> &templates);
+
+private:
+    wxPanel * selected_row;
+    void row_selected(wxEvent &event);
 };
 
 #endif //REMARKABLE_TEMPLATE_LIST_CTRL_H

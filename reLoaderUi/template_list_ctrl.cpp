@@ -19,6 +19,44 @@ int wxCALLBACK sort_template_list(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortD
 
 template_list_ctrl::template_list_ctrl(wxWindow *parent) : wxScrolledWindow(parent,wxID_ANY,wxDefaultPosition,wxDefaultSize,wxVSCROLL) {
     SetScrollRate(0,1);
+    selected_row = nullptr;
+}
+
+void set_row_colour(wxPanel * row, bool is_selected, bool is_built_in ) {
+    auto text = dynamic_cast<wxStaticText *>(row->GetChildren().GetFirst()->GetData());
+    wxColour bgColour;
+    wxColour fgColour;
+
+    if( is_selected) {
+        fgColour = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
+        bgColour = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    } else {
+        if( is_built_in) {
+            fgColour = *wxLIGHT_GREY;
+            text->SetFont(*wxITALIC_FONT);
+        } else {
+            fgColour = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+        }
+        bgColour = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_LISTBOX);
+    }
+    text->SetForegroundColour(fgColour);
+    text->SetBackgroundColour(bgColour);
+    row->SetBackgroundColour(bgColour);
+    row->Refresh();
+}
+
+bool is_row_built_in(wxPanel * panel) {
+    auto flag_ptr = (bool *)(panel->GetClientData());
+    return *flag_ptr;
+}
+
+void template_list_ctrl::row_selected(wxEvent & event) {
+    if( selected_row != nullptr ) {
+        set_row_colour(selected_row, false, is_row_built_in(selected_row));
+        selected_row = nullptr;
+    }
+    selected_row = (wxPanel *)event.GetEventObject();
+    set_row_colour(selected_row, true, is_row_built_in(selected_row));
 }
 
 void template_list_ctrl::set_templates(const std::vector<rm_template> &templates) {
@@ -27,16 +65,16 @@ void template_list_ctrl::set_templates(const std::vector<rm_template> &templates
     for (const auto &tplate : templates) {
         // Make a Panel
         auto panel = new wxPanel(this);
-        panel->SetBackgroundColour(*wxWHITE);
-
-        
 
         // Add text to it
         auto text = new wxStaticText(panel, wxID_ANY,tplate.get_name());
-        if( tplate.is_built_in()) {
-            text->SetForegroundColour(*wxLIGHT_GREY);
-            text->SetFont(*wxITALIC_FONT);
-        }
+        bool * is_built_in_ptr = new bool{tplate.is_built_in()};
+        panel->SetClientData(is_built_in_ptr);
+        set_row_colour(panel, false, *is_built_in_ptr );
+
+        // Add selectability
+        panel->Bind(wxEVT_LEFT_DOWN,&template_list_ctrl::row_selected, this);
+
         // Add it to the box sizer
         sizer->Add(panel,wxSizerFlags(1).Align(wxALIGN_LEFT).Expand());
     }

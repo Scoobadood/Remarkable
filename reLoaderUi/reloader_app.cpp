@@ -17,7 +17,7 @@ std::string string_format(const std::string &format, Args ... args) {
     return std::string(buf.get(), buf.get() + size - 1); // We don't want the '\0' inside
 }
 
-wxListView * make_template_list(wxWindow *parent, remarkable * const device) {
+wxWindow * make_template_list(wxWindow *parent, remarkable * const device) {
 
     auto list = new template_list_ctrl(parent);
     list->set_templates(device->get_installed_templates());
