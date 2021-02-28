@@ -91,7 +91,7 @@ static std::set<std::string> get_builtin_names() {
 }
 
 bool
-rm_template::is_built_in_template_name(const std::string &template_name){
+rm_template::is_built_in_template_name(const std::string &template_name) {
     return (get_builtin_names().count(template_name) > 0);
 }
 
@@ -130,16 +130,29 @@ rm_template::rm_template(std::string name,
     built_in = is_built_in_template_name(name);
 }
 
+rm_template::rm_template(
+        const rm_template &source
+) :
+        name{source.name},
+        file_name{source.file_name},
+        icon_code{source.icon_code},
+        categories{source.categories},
+        landscape{source.landscape} {
+    built_in = is_built_in_template_name(name);
+
+}
+
+
 Json::Value
 rm_template::to_json() const {
     Json::Value json;
     json["name"] = name;
     json["file_name"] = file_name;
     json["icon_code"] = icon_code;
-    if( landscape) {
+    if (landscape) {
         json["landscape"] = true;
     }
-    for( const auto& category : categories) {
+    for (const auto &category : categories) {
         json["categories"].append(category);
     }
     return json;

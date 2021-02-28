@@ -40,6 +40,10 @@ public:
             bool landscape
     );
 
+    rm_template(
+            const rm_template& source
+    );
+
     explicit rm_template(const Json::Value &value);
 
     /**
