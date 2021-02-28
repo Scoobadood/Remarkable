@@ -26,6 +26,9 @@ public:
 private:
     wxPanel * selected_row;
     void row_selected(wxEvent &event);
+    void on_delete(wxEvent &event);
+    void on_edit(wxEvent &event);
+    wxPanel * make_template_row_panel(wxWindow * parent, const rm_template& tplate);
 };
 
 #endif //REMARKABLE_TEMPLATE_LIST_CTRL_H

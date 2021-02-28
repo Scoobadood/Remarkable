@@ -1,5 +1,5 @@
 /* XPM */
-static char *_ed238d39aa446a4bea397be5bc9b8d18ZmXLoK8ZBk5HeaL[] = {
+static char * edit_icon_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 37 1 ",
 "  c #3498DB",
