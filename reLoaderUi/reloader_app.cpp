@@ -36,7 +36,7 @@ bool reloader_app::OnInit() {
             connect_dialog->Close();
             auto *frame = new wxFrame(nullptr, 69, "reLoader");
 
-            auto *splitter = new wxSplitterWindow(frame, wxID_ANY);
+            auto *splitter = new wxSplitterWindow(frame, wxID_ANY,wxDefaultPosition, wxDefaultSize, wxSP_THIN_SASH|wxSP_LIVE_UPDATE);
             splitter->SetSplitMode(wxSPLIT_HORIZONTAL);
 
 
@@ -49,6 +49,8 @@ bool reloader_app::OnInit() {
             auto *template_list = make_template_list(splitter, device);
 
             splitter->SplitVertically(file_list_box, template_list);
+            splitter->SetMinimumPaneSize(20);
+            splitter->SetSashGravity(1.0);
             frame->Show();
             break;
         }
