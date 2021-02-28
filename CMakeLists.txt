@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(remarkable
 		VERSION 0.1
-		LANGUAGES CXX )
+		LANGUAGES CXX)
 
 set(PROJECT_VERSION 0.2)
 
@@ -26,9 +26,9 @@ find_package(fmt REQUIRED)
 # Download and unpack googletest at configure time
 configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
-		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download")
 execute_process(COMMAND "${CMAKE_COMMAND}" --build .
-		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download")
 
 # Prevent GoogleTest from overriding our compiler/linker options
 # when building with Visual Studio
@@ -41,7 +41,7 @@ add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
 		"${CMAKE_BINARY_DIR}/googletest-build")
 
 # Enable Test
-enable_testing( )
+enable_testing()
 
 add_executable(reLoader
 		reLoader/main.h reLoader/main.cpp
@@ -49,23 +49,24 @@ add_executable(reLoader
 		reLoader/uninstall_menu.h reLoader/uninstall_menu.cpp
 		reLoader/install_menu.h reLoader/install_menu.cpp
 		reLoader/edit_menu.h reLoader/edit_menu.cpp
-)
+		)
 
 target_link_libraries(reLoader
 		menu
 		remarkable
-)
+		)
 
 add_executable(reLoaderUi
 		reLoaderUi/reloader_app.cpp reLoaderUi/reloader_app.h
 		reLoaderUi/reloader_conect_dlg.cpp reLoaderUi/reloader_connect_dlg.h
 		reLoaderUi/template_list_ctrl.cpp reLoaderUi/template_list_ctrl.h
+		reLoaderUi/edit_template_dlg.cpp reLoaderUi/edit_template_dlg.h
 		)
 
 target_link_libraries(reLoaderUi
 		wx::net wx::core wx::base
 		remarkable)
 
-add_subdirectory( libmenu )
-add_subdirectory( libremarkable )
-add_subdirectory( reLoaderUi )
+add_subdirectory(libmenu)
+add_subdirectory(libremarkable)
+add_subdirectory(reLoaderUi)

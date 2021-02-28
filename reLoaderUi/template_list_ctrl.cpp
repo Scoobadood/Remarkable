@@ -5,6 +5,7 @@
 #include "template_list_ctrl.h"
 #include "bitmaps/trash_icon_16.xpm"
 #include "bitmaps/edit_icon_16.xpm"
+#include "edit_template_dlg.h"
 
 int wxCALLBACK sort_template_list(wxIntPtr item1, wxIntPtr item2, wxIntPtr sortData) {
     // Sort installed templates to the front
@@ -79,6 +80,8 @@ void template_list_ctrl::on_edit(wxEvent &event) {
     auto tplate_ptr = pointer_for_button(event.GetEventObject());
     std::cout << "on_edit " << tplate_ptr->get_name() << std::endl;
     // Display modal dialog allowing for editing of name, landscapishness.
+    auto dlg = new edit_template_dlg(this, tplate_ptr->get_name(), tplate_ptr->is_landscape());
+    dlg->ShowModal();
 }
 
 
